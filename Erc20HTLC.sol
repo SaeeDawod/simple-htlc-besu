@@ -9,7 +9,8 @@ contract MyToken is ERC20, Ownable, ERC20Permit {
     bytes32 public secretHash;
     address public recipient;
     uint256 public timelock;
-    uint256 public mintAmount;
+    // uint256 public mintAmount;
+    uint256 public amountAllowedToMint;
 
     event TokensClaimed(string secret);
     event RecipientChanged(address newRecipient);
@@ -26,14 +27,15 @@ contract MyToken is ERC20, Ownable, ERC20Permit {
         // recipient = _recipient;
     }
 
-    function mint(string memory _secret) public {
+    function mint(string memory _secret, uint256 _amount ) public {
         require(msg.sender == recipient, "Only the recipient can mint tokens.");
         require(block.timestamp <= timelock, "The timelock has expired.");
-        require(
-            sha256(abi.encodePacked(_secret)) == secretHash,
-            "Invalid secret."
-        );
-        _mint(recipient, 1);
+        require(sha256(abi.encodePacked(_secret)) == secretHash,
+            "Invalid secret.");
+        require(_amount <= amountAllowedToMint, "Amount bigger than balance allowed to mint .");
+
+        _mint(recipient, _amount);
+
         emit TokensClaimed(_secret);
         secretHash = 0x0; // Reset the secret hash to prevent further minting
     }
@@ -48,9 +50,15 @@ contract MyToken is ERC20, Ownable, ERC20Permit {
         emit RecipientChanged(_recipient);
     }
 
-     function setNewSecertHash(bytes32 _newSecertHash) public onlyOwner {
+     function prepareSwap(bytes32 _newSecertHash, address _recipient , uint256 _approveMintAmount ) public onlyOwner {
+
         secretHash = _newSecertHash;
+        recipient = _recipient;
+        amountAllowedToMint = _approveMintAmount;
+
+        emit RecipientChanged(_recipient);
         emit secertHashChanged(true);
     }
+
     // rest of erc 20 functions
 }
