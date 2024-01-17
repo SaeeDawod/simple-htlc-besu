@@ -1,0 +1,29 @@
+  - kind: ethereum/contract
+    name: {id}
+    network: {chain}
+    source:
+      address: "{address}"
+      abi: MyToken
+      startBlock: {startBlock}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - TokenMint
+        - TokenBurn
+        - RecipientChange
+        - SecretHashChange
+      abis:
+        - name: MyToken
+          file: ../abi/MyToken.json
+      eventHandlers:
+        - event: TokensClaimed(string)
+          handler: handleTokensClaimed
+        - event: TokensBurned(indexed address,uint256)
+          handler: handleTokensBurned
+        - event: RecipientChanged(address)
+          handler: handleRecipientChanged
+        - event: SecretHashChanged(bool)
+          handler: handleSecretHashChanged
+      file: {file}

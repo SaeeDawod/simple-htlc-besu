@@ -1,0 +1,32 @@
+[
+    {
+      "name": "TokensClaim",
+      "fields": [
+        { "name": "id", "type": "ID!" },
+        { "name": "secret", "type": "String" }
+      ]
+    },
+    {
+      "name": "RecipientChange",
+      "fields": [
+        { "name": "id", "type": "ID!" },
+        { "name": "newRecipient", "type": "Bytes!" }
+      ]
+    },
+    {
+      "name": "TokenBurn",
+      "fields": [
+        { "name": "id", "type": "ID!" },
+        { "name": "burner", "type": "Bytes!" },
+        { "name": "amount", "type": "BigInt!" }
+      ]
+    },
+    {
+      "name": "SecretHashUpdate",
+      "fields": [
+        { "name": "id", "type": "ID!" },
+        { "name": "newSecretHash", "type": "Boolean!" }
+      ]
+    }
+  ]
+
