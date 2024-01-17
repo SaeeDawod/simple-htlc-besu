@@ -1,6 +1,6 @@
 [
     {
-        "id": "cd067fae9e174ca3",
+        "id": "d2d0aa73a11dcc03",
         "type": "tab",
         "label": "HTLC swap",
         "disabled": false,
@@ -8,9 +8,9 @@
         "env": []
     },
     {
-        "id": "9622b1850df35f4c",
+        "id": "6a4e25ed7f3e7ae5",
         "type": "function",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
         "name": "Prepare TXN",
         "func": "\n//Sets the hash which is resolved by the secert (normally will get this from Corda\n//or the atomic swap operator\nconst hash = crypto.createHash('sha256').update(msg.secert).digest('hex');\n//Determine who is the atomic swap recipient\nconst newRecipient = msg.recipient\n//send how many tokens are allowed to be swaped\n// const approvedSwapAmount = msg.amount\nlet approvedSwapAmount = ethers.parseUnits(msg.amount.toString(), 18);\n\nconst privateKey = global.get('privateKey');\nconst contractAddress = global.get('contract');\nconst rpcEndpoint = global.get('rpcEndpoint');\nconst abi = global.get('abi');\n\n// Create a new provider\nconst provider = new ethers.JsonRpcProvider(rpcEndpoint);\n\n// Create a wallet/signer\nconst wallet = new ethers.Wallet(privateKey, provider);\n\n// Create a contract instance\nconst contract = new ethers.Contract(contractAddress, abi, wallet);\n\nlet swapTxn = await contract.prepareSwap('0x' + hash, newRecipient, approvedSwapAmount);\n\nawait swapTxn.wait();\n\nmsg.hash = await swapTxn.hash;\nreturn msg;",
         "outputs": 1,
@@ -28,18 +28,18 @@
                 "module": "ethers"
             }
         ],
-        "x": 450,
+        "x": 510,
         "y": 200,
         "wires": [
             [
-                "f2f6d7a2b6f5d207"
+                "124e6f58cd83fd53"
             ]
         ]
     },
     {
-        "id": "f2f6d7a2b6f5d207",
+        "id": "124e6f58cd83fd53",
         "type": "debug",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
         "name": "Get txn hash",
         "active": true,
         "tosidebar": true,
@@ -49,16 +49,16 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 710,
+        "x": 870,
         "y": 200,
         "wires": []
     },
     {
-        "id": "2a5b3ac99c811b78",
+        "id": "53bcd3140a64f95f",
         "type": "function",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
         "name": "set blockchain variables ",
-        "func": "const glbVar = {\n  privateKey: '0x9e9b60ae4332a9f5527ca16ae0e95e98576431ea70c4f1edbe1c10d372675b5d',\n  contract: '0xD14b011f9Ca7CF8E0A7cfF14ad66Efa9fD570D42',\n  bpassKey: 'sm_sat_eced4996488787d7',\n  rpcEndpoint: 'https://nbd-demo-node-1-efaa.aks-middleeast.settlemint.com/sm_sat_eced4996488787d7',\n  abi: [\n    {\n      \"inputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"constructor\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"InvalidShortString\",\n      \"type\": \"error\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"string\",\n          \"name\": \"str\",\n          \"type\": \"string\"\n        }\n      ],\n      \"name\": \"StringTooLong\",\n      \"type\": \"error\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [\n        {\n          \"indexed\": true,\n          \"internalType\": \"address\",\n          \"name\": \"owner\",\n          \"type\": \"address\"\n        },\n        {\n          \"indexed\": true,\n          \"internalType\": \"address\",\n          \"name\": \"spender\",\n          \"type\": \"address\"\n        },\n        {\n          \"indexed\": false,\n          \"internalType\": \"uint256\",\n          \"name\": \"value\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"Approval\",\n      \"type\": \"event\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [],\n      \"name\": \"EIP712DomainChanged\",\n      \"type\": \"event\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [\n        {\n          \"indexed\": true,\n          \"internalType\": \"address\",\n          \"name\": \"previousOwner\",\n          \"type\": \"address\"\n        },\n        {\n          \"indexed\": true,\n          \"internalType\": \"address\",\n          \"name\": \"newOwner\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"OwnershipTransferred\",\n      \"type\": \"event\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [\n        {\n          \"indexed\": false,\n          \"internalType\": \"address\",\n          \"name\": \"newRecipient\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"RecipientChanged\",\n      \"type\": \"event\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [\n        {\n          \"indexed\": true,\n          \"internalType\": \"address\",\n          \"name\": \"burner\",\n          \"type\": \"address\"\n        },\n        {\n          \"indexed\": false,\n          \"internalType\": \"uint256\",\n          \"name\": \"amount\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"TokensBurned\",\n      \"type\": \"event\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [\n        {\n          \"indexed\": false,\n          \"internalType\": \"string\",\n          \"name\": \"secret\",\n          \"type\": \"string\"\n        }\n      ],\n      \"name\": \"TokensClaimed\",\n      \"type\": \"event\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [\n        {\n          \"indexed\": true,\n          \"internalType\": \"address\",\n          \"name\": \"from\",\n          \"type\": \"address\"\n        },\n        {\n          \"indexed\": true,\n          \"internalType\": \"address\",\n          \"name\": \"to\",\n          \"type\": \"address\"\n        },\n        {\n          \"indexed\": false,\n          \"internalType\": \"uint256\",\n          \"name\": \"value\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"Transfer\",\n      \"type\": \"event\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [\n        {\n          \"indexed\": false,\n          \"internalType\": \"bool\",\n          \"name\": \"newSecertHash\",\n          \"type\": \"bool\"\n        }\n      ],\n      \"name\": \"secertHashChanged\",\n      \"type\": \"event\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"DOMAIN_SEPARATOR\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bytes32\",\n          \"name\": \"\",\n          \"type\": \"bytes32\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"owner\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"address\",\n          \"name\": \"spender\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"allowance\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"amountAllowedToMint\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"spender\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"amount\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"approve\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bool\",\n          \"name\": \"\",\n          \"type\": \"bool\"\n        }\n      ],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"account\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"balanceOf\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"_amount\",\n          \"type\": \"uint256\"\n        },\n        {\n          \"internalType\": \"address\",\n          \"name\": \"_burnFromAddress\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"burn\",\n      \"outputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"decimals\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint8\",\n          \"name\": \"\",\n          \"type\": \"uint8\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"spender\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"subtractedValue\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"decreaseAllowance\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bool\",\n          \"name\": \"\",\n          \"type\": \"bool\"\n        }\n      ],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"eip712Domain\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bytes1\",\n          \"name\": \"fields\",\n          \"type\": \"bytes1\"\n        },\n        {\n          \"internalType\": \"string\",\n          \"name\": \"name\",\n          \"type\": \"string\"\n        },\n        {\n          \"internalType\": \"string\",\n          \"name\": \"version\",\n          \"type\": \"string\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"chainId\",\n          \"type\": \"uint256\"\n        },\n        {\n          \"internalType\": \"address\",\n          \"name\": \"verifyingContract\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"bytes32\",\n          \"name\": \"salt\",\n          \"type\": \"bytes32\"\n        },\n        {\n          \"internalType\": \"uint256[]\",\n          \"name\": \"extensions\",\n          \"type\": \"uint256[]\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"spender\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"addedValue\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"increaseAllowance\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bool\",\n          \"name\": \"\",\n          \"type\": \"bool\"\n        }\n      ],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"string\",\n          \"name\": \"_secret\",\n          \"type\": \"string\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"_amount\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"mint\",\n      \"outputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"mintAmount\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"name\",\n      \"outputs\": [\n        {\n          \"internalType\": \"string\",\n          \"name\": \"\",\n          \"type\": \"string\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"owner\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"nonces\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"owner\",\n      \"outputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"\",\n          \"type\": \"address\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"owner\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"address\",\n          \"name\": \"spender\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"value\",\n          \"type\": \"uint256\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"deadline\",\n          \"type\": \"uint256\"\n        },\n        {\n          \"internalType\": \"uint8\",\n          \"name\": \"v\",\n          \"type\": \"uint8\"\n        },\n        {\n          \"internalType\": \"bytes32\",\n          \"name\": \"r\",\n          \"type\": \"bytes32\"\n        },\n        {\n          \"internalType\": \"bytes32\",\n          \"name\": \"s\",\n          \"type\": \"bytes32\"\n        }\n      ],\n      \"name\": \"permit\",\n      \"outputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"bytes32\",\n          \"name\": \"_newSecertHash\",\n          \"type\": \"bytes32\"\n        },\n        {\n          \"internalType\": \"address\",\n          \"name\": \"_recipient\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"_approveMintAmount\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"prepareSwap\",\n      \"outputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"recipient\",\n      \"outputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"\",\n          \"type\": \"address\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"renounceOwnership\",\n      \"outputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"secretHash\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bytes32\",\n          \"name\": \"\",\n          \"type\": \"bytes32\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"_recipient\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"setNewRecipient\",\n      \"outputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"symbol\",\n      \"outputs\": [\n        {\n          \"internalType\": \"string\",\n          \"name\": \"\",\n          \"type\": \"string\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"timelock\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"totalSupply\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"to\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"amount\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"transfer\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bool\",\n          \"name\": \"\",\n          \"type\": \"bool\"\n        }\n      ],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"from\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"address\",\n          \"name\": \"to\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"amount\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"transferFrom\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bool\",\n          \"name\": \"\",\n          \"type\": \"bool\"\n        }\n      ],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"newOwner\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"transferOwnership\",\n      \"outputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    }\n  ]\n\n}\n\nglobal.set('privateKey', glbVar.privateKey);\nglobal.set('contract', glbVar.contract);\nglobal.set('bpassKey', glbVar.bpassKey);\nglobal.set('rpcEndpoint', glbVar.rpcEndpoint);\nglobal.set('abi',glbVar.abi)\n\n\nmsg.success = 'Global vars ready' \nreturn msg \n\n\n",
+        "func": "const glbVar = {\n  privateKey: '0x9e9b60ae4332a9f5527ca16ae0e95e98576431ea70c4f1edbe1c10d372675b5d',\n  contract: '0x33089276E0B40925Ff63FaeA318C0192B7088b04',\n  bpassKey: 'sm_sat_eced4996488787d7',\n  rpcEndpoint: 'https://nbd-demo-node-1-efaa.aks-middleeast.settlemint.com/sm_sat_eced4996488787d7',\n  abi: [\n    {\n      \"inputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"constructor\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"InvalidShortString\",\n      \"type\": \"error\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"string\",\n          \"name\": \"str\",\n          \"type\": \"string\"\n        }\n      ],\n      \"name\": \"StringTooLong\",\n      \"type\": \"error\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [\n        {\n          \"indexed\": true,\n          \"internalType\": \"address\",\n          \"name\": \"owner\",\n          \"type\": \"address\"\n        },\n        {\n          \"indexed\": true,\n          \"internalType\": \"address\",\n          \"name\": \"spender\",\n          \"type\": \"address\"\n        },\n        {\n          \"indexed\": false,\n          \"internalType\": \"uint256\",\n          \"name\": \"value\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"Approval\",\n      \"type\": \"event\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [],\n      \"name\": \"EIP712DomainChanged\",\n      \"type\": \"event\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [\n        {\n          \"indexed\": true,\n          \"internalType\": \"address\",\n          \"name\": \"previousOwner\",\n          \"type\": \"address\"\n        },\n        {\n          \"indexed\": true,\n          \"internalType\": \"address\",\n          \"name\": \"newOwner\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"OwnershipTransferred\",\n      \"type\": \"event\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [\n        {\n          \"indexed\": false,\n          \"internalType\": \"address\",\n          \"name\": \"newRecipient\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"RecipientChanged\",\n      \"type\": \"event\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [\n        {\n          \"indexed\": true,\n          \"internalType\": \"address\",\n          \"name\": \"burner\",\n          \"type\": \"address\"\n        },\n        {\n          \"indexed\": false,\n          \"internalType\": \"uint256\",\n          \"name\": \"amount\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"TokensBurned\",\n      \"type\": \"event\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [\n        {\n          \"indexed\": false,\n          \"internalType\": \"string\",\n          \"name\": \"secret\",\n          \"type\": \"string\"\n        }\n      ],\n      \"name\": \"TokensClaimed\",\n      \"type\": \"event\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [\n        {\n          \"indexed\": true,\n          \"internalType\": \"address\",\n          \"name\": \"from\",\n          \"type\": \"address\"\n        },\n        {\n          \"indexed\": true,\n          \"internalType\": \"address\",\n          \"name\": \"to\",\n          \"type\": \"address\"\n        },\n        {\n          \"indexed\": false,\n          \"internalType\": \"uint256\",\n          \"name\": \"value\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"Transfer\",\n      \"type\": \"event\"\n    },\n    {\n      \"anonymous\": false,\n      \"inputs\": [\n        {\n          \"indexed\": false,\n          \"internalType\": \"bool\",\n          \"name\": \"newSecertHash\",\n          \"type\": \"bool\"\n        }\n      ],\n      \"name\": \"secertHashChanged\",\n      \"type\": \"event\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"DOMAIN_SEPARATOR\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bytes32\",\n          \"name\": \"\",\n          \"type\": \"bytes32\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"owner\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"address\",\n          \"name\": \"spender\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"allowance\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"amountAllowedToMint\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"spender\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"amount\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"approve\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bool\",\n          \"name\": \"\",\n          \"type\": \"bool\"\n        }\n      ],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"account\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"balanceOf\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"_amount\",\n          \"type\": \"uint256\"\n        },\n        {\n          \"internalType\": \"address\",\n          \"name\": \"_burnFromAddress\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"burn\",\n      \"outputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"decimals\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint8\",\n          \"name\": \"\",\n          \"type\": \"uint8\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"spender\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"subtractedValue\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"decreaseAllowance\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bool\",\n          \"name\": \"\",\n          \"type\": \"bool\"\n        }\n      ],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"eip712Domain\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bytes1\",\n          \"name\": \"fields\",\n          \"type\": \"bytes1\"\n        },\n        {\n          \"internalType\": \"string\",\n          \"name\": \"name\",\n          \"type\": \"string\"\n        },\n        {\n          \"internalType\": \"string\",\n          \"name\": \"version\",\n          \"type\": \"string\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"chainId\",\n          \"type\": \"uint256\"\n        },\n        {\n          \"internalType\": \"address\",\n          \"name\": \"verifyingContract\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"bytes32\",\n          \"name\": \"salt\",\n          \"type\": \"bytes32\"\n        },\n        {\n          \"internalType\": \"uint256[]\",\n          \"name\": \"extensions\",\n          \"type\": \"uint256[]\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"spender\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"addedValue\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"increaseAllowance\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bool\",\n          \"name\": \"\",\n          \"type\": \"bool\"\n        }\n      ],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"string\",\n          \"name\": \"_secret\",\n          \"type\": \"string\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"_amount\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"mint\",\n      \"outputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"mintAmount\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"name\",\n      \"outputs\": [\n        {\n          \"internalType\": \"string\",\n          \"name\": \"\",\n          \"type\": \"string\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"owner\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"nonces\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"owner\",\n      \"outputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"\",\n          \"type\": \"address\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"owner\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"address\",\n          \"name\": \"spender\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"value\",\n          \"type\": \"uint256\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"deadline\",\n          \"type\": \"uint256\"\n        },\n        {\n          \"internalType\": \"uint8\",\n          \"name\": \"v\",\n          \"type\": \"uint8\"\n        },\n        {\n          \"internalType\": \"bytes32\",\n          \"name\": \"r\",\n          \"type\": \"bytes32\"\n        },\n        {\n          \"internalType\": \"bytes32\",\n          \"name\": \"s\",\n          \"type\": \"bytes32\"\n        }\n      ],\n      \"name\": \"permit\",\n      \"outputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"bytes32\",\n          \"name\": \"_newSecertHash\",\n          \"type\": \"bytes32\"\n        },\n        {\n          \"internalType\": \"address\",\n          \"name\": \"_recipient\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"_approveMintAmount\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"prepareSwap\",\n      \"outputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"recipient\",\n      \"outputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"\",\n          \"type\": \"address\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"renounceOwnership\",\n      \"outputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"secretHash\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bytes32\",\n          \"name\": \"\",\n          \"type\": \"bytes32\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"_recipient\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"setNewRecipient\",\n      \"outputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"symbol\",\n      \"outputs\": [\n        {\n          \"internalType\": \"string\",\n          \"name\": \"\",\n          \"type\": \"string\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"timelock\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [],\n      \"name\": \"totalSupply\",\n      \"outputs\": [\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"stateMutability\": \"view\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"to\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"amount\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"transfer\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bool\",\n          \"name\": \"\",\n          \"type\": \"bool\"\n        }\n      ],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"from\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"address\",\n          \"name\": \"to\",\n          \"type\": \"address\"\n        },\n        {\n          \"internalType\": \"uint256\",\n          \"name\": \"amount\",\n          \"type\": \"uint256\"\n        }\n      ],\n      \"name\": \"transferFrom\",\n      \"outputs\": [\n        {\n          \"internalType\": \"bool\",\n          \"name\": \"\",\n          \"type\": \"bool\"\n        }\n      ],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    },\n    {\n      \"inputs\": [\n        {\n          \"internalType\": \"address\",\n          \"name\": \"newOwner\",\n          \"type\": \"address\"\n        }\n      ],\n      \"name\": \"transferOwnership\",\n      \"outputs\": [],\n      \"stateMutability\": \"nonpayable\",\n      \"type\": \"function\"\n    }\n  ]\n\n}\n\nglobal.set('privateKey', glbVar.privateKey);\nglobal.set('contract', glbVar.contract);\nglobal.set('bpassKey', glbVar.bpassKey);\nglobal.set('rpcEndpoint', glbVar.rpcEndpoint);\nglobal.set('abi',glbVar.abi)\n\n\nmsg.success = 'Global vars ready' \nreturn msg \n\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -69,14 +69,14 @@
         "y": 80,
         "wires": [
             [
-                "5724678470747c70"
+                "60c31cf8c3833fec"
             ]
         ]
     },
     {
-        "id": "1a75de223694ca29",
+        "id": "06661c261e9270e7",
         "type": "inject",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
         "name": "set blockchain vars",
         "props": [],
         "repeat": "",
@@ -88,14 +88,14 @@
         "y": 80,
         "wires": [
             [
-                "2a5b3ac99c811b78"
+                "53bcd3140a64f95f"
             ]
         ]
     },
     {
-        "id": "5724678470747c70",
+        "id": "60c31cf8c3833fec",
         "type": "debug",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
         "name": "Success",
         "active": true,
         "tosidebar": true,
@@ -110,9 +110,9 @@
         "wires": []
     },
     {
-        "id": "0d414ffa0a771aa1",
+        "id": "fa337fef7532246d",
         "type": "inject",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
         "name": "Set Reciept and Secert in contract ",
         "props": [
             {
@@ -140,15 +140,16 @@
         "y": 200,
         "wires": [
             [
-                "9622b1850df35f4c"
+                "6a4e25ed7f3e7ae5",
+                "657192de4c7dc2f2"
             ]
         ]
     },
     {
-        "id": "bf007e33fc1c84a8",
+        "id": "34e5981f25acca48",
         "type": "inject",
-        "z": "cd067fae9e174ca3",
-        "name": "resolve secert - claim tokens",
+        "z": "d2d0aa73a11dcc03",
+        "name": "Atomic swap with HTLC  (Corda => Besu)",
         "props": [
             {
                 "p": "secret",
@@ -166,20 +167,21 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 180,
-        "y": 380,
+        "x": 200,
+        "y": 500,
         "wires": [
             [
-                "188fc6bbf084194b"
+                "406d3717977764bf",
+                "6bfe602f3c31e4a5"
             ]
         ]
     },
     {
-        "id": "188fc6bbf084194b",
+        "id": "406d3717977764bf",
         "type": "function",
-        "z": "cd067fae9e174ca3",
-        "name": "Run claim function ",
-        "func": "const privateKey = global.get('privateKey');\nconst contractAddress = global.get('contract');\nconst rpcEndpoint = global.get('rpcEndpoint');\nconst abi = global.get('abi');\n\nfunction parseTokenActionResponse(data) {\n    const transactionIdMatch = data.match(/Transaction id (\\S+) committed to ledger./);\n    const detailsMatch = data.match(/([\\d.]+) TokenType\\(tokenIdentifier='(\\w+)', fractionDigits=(\\d+)\\) issued by (\\w+) held by (\\w+)/);\n\n    return {\n        transactionId: transactionIdMatch ? transactionIdMatch[1] : 'N/A',\n        amount: detailsMatch ? detailsMatch[1] : 'N/A',\n        tokenType: detailsMatch ? detailsMatch[2] : 'N/A',\n        fractionDigits: detailsMatch ? detailsMatch[3] : 'N/A',\n        issuedBy: detailsMatch ? detailsMatch[4] : 'N/A',\n        heldBy: detailsMatch ? detailsMatch[5] : 'N/A'\n    };\n}\n\n\nasync function burnCordaToken() {\n    const url = 'http://143.198.233.189:50005/burn-token';\n    const queryString = `amount=100&recipient=O=PartyC,L=Mumbai,C=IN&currency=USD`;\n\n    try {\n        const response = await axios.post(url, queryString, {\n            headers: {\n                'Content-Type': 'application/x-www-form-urlencoded'\n            }\n        });\n        const data = await response.data;\n        return parseTokenActionResponse(data);\n    } catch (error) {\n        console.error('Error during HTTP POST Request:', error);\n        return null;\n    }\n}\n\n\n\nconst burnCorda= await  burnCordaToken()\nmsg.cordaBurnedAmount = burnCorda;\n\n// Create a new provider\nconst provider = new ethers.JsonRpcProvider(rpcEndpoint);\n\n// Create a wallet/signer\nconst wallet = new ethers.Wallet(privateKey, provider);\n\n// Create a contract instance\nconst contract = new ethers.Contract(contractAddress, abi, wallet);\n\nlet amountToMint = ethers.parseUnits(msg.amount.toString(), 18);\n\nlet mintTxn = await contract.mint(msg.secret, amountToMint);\nawait mintTxn.wait();\n\nmsg.mintTxnHash = mintTxn.hash\n\nreturn msg \n\n\n",
+        "z": "d2d0aa73a11dcc03",
+        "name": "burn from corda & mint in besu",
+        "func": "const privateKey = global.get('privateKey');\nconst contractAddress = global.get('contract');\nconst rpcEndpoint = global.get('rpcEndpoint');\nconst abi = global.get('abi');\nconst getAccMapping = global.get('mappingEvmAndCorda')\n\n  \n\nfunction parseTokenActionResponse(data) {\n    const transactionIdMatch = data.match(/Transaction id (\\S+) committed to ledger./);\n    const detailsMatch = data.match(/([\\d.]+) TokenType\\(tokenIdentifier='(\\w+)', fractionDigits=(\\d+)\\) issued by (\\w+) held by (\\w+)/);\n\n    return {\n        transactionId: transactionIdMatch ? transactionIdMatch[1] : 'N/A',\n        amount: detailsMatch ? detailsMatch[1] : 'N/A',\n        tokenType: detailsMatch ? detailsMatch[2] : 'N/A',\n        fractionDigits: detailsMatch ? detailsMatch[3] : 'N/A',\n        issuedBy: detailsMatch ? detailsMatch[4] : 'N/A',\n        heldBy: detailsMatch ? detailsMatch[5] : 'N/A'\n    };\n}\n\nasync function burnCordaToken() {\n    const url = 'http://143.198.233.189:50005/burn-token';\n    const queryString = `amount=100&recipient=O=${getAccMapping},L=Mumbai,C=IN&currency=USD`;\n    // const queryString = `amount=100&recipient=O=PartyC,L=Mumbai,C=IN&currency=USD`;\n    try {\n        const response = await axios.post(url, queryString, {\n            headers: {\n                'Content-Type': 'application/x-www-form-urlencoded'\n            }\n        });\n        const data = await response.data;\n        return parseTokenActionResponse(data);\n    } catch (error) {\n        console.error('Error during HTTP POST Request:', error);\n        return null;\n    }\n}\n\n\n\nconst burnCorda = await burnCordaToken()\n\nif (burnCorda) {\n    // Create a new provider\n    const provider = new ethers.JsonRpcProvider(rpcEndpoint);\n\n    // Create a wallet/signer\n    const wallet = new ethers.Wallet(privateKey, provider);\n\n    // Create a contract instance\n    const contract = new ethers.Contract(contractAddress, abi, wallet);\n\n    let amountToMint = await ethers.parseUnits(msg.amount.toString(), 18);\n\n    let mintTxn = await contract.mint(msg.secret, amountToMint);\n    await mintTxn.wait();\n\n    msg.mintTxnHash = await mintTxn.hash\n    msg.cordaTxnInfo = await  burnCorda.transactionId;\n\n    return  msg\n}\nelse {\n    \n    msg.mintTxnHash = 'not working';\n    msg.cordaTxnInfo = 'not working ';\n\n    return msg\n}\n\n\n\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -199,20 +201,19 @@
                 "module": "axios"
             }
         ],
-        "x": 470,
-        "y": 380,
+        "x": 570,
+        "y": 500,
         "wires": [
             [
-                "5bf35c427c2adc49",
-                "6707c350e5379ac0"
+                "6bfe602f3c31e4a5"
             ]
         ]
     },
     {
-        "id": "5bf35c427c2adc49",
+        "id": "cfbc95d3eef14193",
         "type": "debug",
-        "z": "cd067fae9e174ca3",
-        "name": "Claim txn hash",
+        "z": "d2d0aa73a11dcc03",
+        "name": "besu txn hash",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -221,15 +222,15 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 720,
-        "y": 360,
+        "x": 1100,
+        "y": 480,
         "wires": []
     },
     {
-        "id": "2932bba91b92bc62",
+        "id": "47ef6dcb42ae8a09",
         "type": "inject",
-        "z": "cd067fae9e174ca3",
-        "name": "burn tokens",
+        "z": "d2d0aa73a11dcc03",
+        "name": "Atomic swap  (Besu => Corda)",
         "props": [
             {
                 "p": "amountToBurn",
@@ -247,20 +248,20 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 130,
-        "y": 540,
+        "x": 160,
+        "y": 740,
         "wires": [
             [
-                "dce0f389282f5730"
+                "15d320b3b56279aa"
             ]
         ]
     },
     {
-        "id": "dce0f389282f5730",
+        "id": "15d320b3b56279aa",
         "type": "function",
-        "z": "cd067fae9e174ca3",
-        "name": "Run burn function ",
-        "func": "const privateKey = global.get('privateKey');\nconst contractAddress = global.get('contract');\nconst rpcEndpoint = global.get('rpcEndpoint');\nconst abi = global.get('abi');\n\nfunction parseTokenActionResponse(data) {\n    const transactionIdMatch = data.match(/Transaction id (\\S+) committed to ledger./);\n    const detailsMatch = data.match(/([\\d.]+) TokenType\\(tokenIdentifier='(\\w+)', fractionDigits=(\\d+)\\) issued by (\\w+) held by (\\w+)/);\n\n    return {\n        transactionId: transactionIdMatch ? transactionIdMatch[1] : 'N/A',\n        amount: detailsMatch ? detailsMatch[1] : 'N/A',\n        tokenType: detailsMatch ? detailsMatch[2] : 'N/A',\n        fractionDigits: detailsMatch ? detailsMatch[3] : 'N/A',\n        issuedBy: detailsMatch ? detailsMatch[4] : 'N/A',\n        heldBy: detailsMatch ? detailsMatch[5] : 'N/A'\n    };\n}\n\n\nasync function createCordaToken() {\n    \n    const url = 'http://143.198.233.189:50005/create-token';\n    const queryString = `amount=100&recipient=O=PartyC,L=Mumbai,C=IN&currency=USD`;\n\n    try {\n        const response = await axios.post(url, queryString, {\n            headers: {\n                'Content-Type': 'application/x-www-form-urlencoded'\n            }\n        });\n        const data = await response.data;\n        return parseTokenActionResponse(data);\n    } catch (error) {\n        console.error('Error during HTTP POST Request:', error);\n        return null;\n    }\n}\n\n\n\n\nconst createCorda= await  createCordaToken()\nmsg.cordaCrateAmount = createCorda\n// Create a new provider\nconst provider = new ethers.JsonRpcProvider(rpcEndpoint);\n\n// Create a wallet/signer\nconst wallet = new ethers.Wallet(privateKey, provider);\n\n// Create a contract instance\nconst contract = new ethers.Contract(contractAddress, abi, wallet);\n\nlet amountToMint = ethers.parseUnits(msg.amountToBurn.toString(), 18);\n\nlet burnTxnHash = await contract.burn(amountToMint, msg.burnFromAddress);\nawait burnTxnHash.wait();\n\nmsg.burnTxnHash = burnTxnHash.hash\n\nreturn msg \n\n\n",
+        "z": "d2d0aa73a11dcc03",
+        "name": "burn besu & mint corda",
+        "func": "const privateKey = global.get('privateKey');\nconst contractAddress = global.get('contract');\nconst rpcEndpoint = global.get('rpcEndpoint');\nconst abi = global.get('abi');\nconst getAccMapping = global.get('mappingEvmAndCorda')\n\nfunction parseTokenActionResponse(data) {\n    const transactionIdMatch = data.match(/Transaction id (\\S+) committed to ledger./);\n    const detailsMatch = data.match(/([\\d.]+) TokenType\\(tokenIdentifier='(\\w+)', fractionDigits=(\\d+)\\) issued by (\\w+) held by (\\w+)/);\n\n    return {\n        transactionId: transactionIdMatch ? transactionIdMatch[1] : 'N/A',\n        amount: detailsMatch ? detailsMatch[1] : 'N/A',\n        tokenType: detailsMatch ? detailsMatch[2] : 'N/A',\n        fractionDigits: detailsMatch ? detailsMatch[3] : 'N/A',\n        issuedBy: detailsMatch ? detailsMatch[4] : 'N/A',\n        heldBy: detailsMatch ? detailsMatch[5] : 'N/A'\n    };\n}\n\n\nasync function createCordaToken() {\n    \n    const url = 'http://143.198.233.189:50005/create-token';\n    const queryString = `amount=100&recipient=O=${getAccMapping},L=Mumbai,C=IN&currency=USD`;\n\n    try {\n        const response = await axios.post(url, queryString, {\n            headers: {\n                'Content-Type': 'application/x-www-form-urlencoded'\n            }\n        });\n        const data = await response.data;\n        return parseTokenActionResponse(data);\n    } catch (error) {\n        console.error('Error during HTTP POST Request:', error);\n        return null;\n    }\n}\n\n\n\n\nconst createCorda= await  createCordaToken()\nmsg.cordaCrateAmount = createCorda\n// Create a new provider\nconst provider = new ethers.JsonRpcProvider(rpcEndpoint);\n\n// Create a wallet/signer\nconst wallet = new ethers.Wallet(privateKey, provider);\n\n// Create a contract instance\nconst contract = new ethers.Contract(contractAddress, abi, wallet);\n\nlet amountToMint = ethers.parseUnits(msg.amountToBurn.toString(), 18);\n\nlet burnTxnHash = await contract.burn(amountToMint, msg.burnFromAddress);\nawait burnTxnHash.wait();\n\nmsg.burnTxnHash = burnTxnHash.hash\n\nreturn msg \n\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -280,18 +281,18 @@
                 "module": "axios"
             }
         ],
-        "x": 450,
-        "y": 540,
+        "x": 610,
+        "y": 740,
         "wires": [
             [
-                "c94f49cf967e7087"
+                "62ab99ac9b95e642"
             ]
         ]
     },
     {
-        "id": "c94f49cf967e7087",
+        "id": "62ab99ac9b95e642",
         "type": "debug",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
         "name": "Burn txn hash",
         "active": true,
         "tosidebar": true,
@@ -301,63 +302,63 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 700,
-        "y": 540,
+        "x": 1020,
+        "y": 740,
         "wires": []
     },
     {
-        "id": "03e6b08456673c3d",
+        "id": "3e037fdbee4a5523",
         "type": "template",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
         "name": "",
         "field": "payload",
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Corda Console</title>\n    <style>\n           body {\n            background-color: black;\n            color: white;\n            font-family: 'Courier New', monospace;\n            padding: 20px;\n        }\n        .console {\n            white-space: pre-wrap;\n            font-size: 16px;\n             /* border: 1px solid #00ff00; */ */\n            padding: 10px;\n            /* overflow-y: auto; */\n            /* height: 500px; */\n            margin-bottom: 20px;\n        }\n        .state {\n            margin-bottom: 10px;\n            padding: 5px;\n           // border: 1px dashed #00ff00;\n           background-color:rgba(255,255,255,0.1)\n        }\n        h2{\n            text-align:center; \n        }\n\n    </style>\n</head>\n<body>\n    <div class=\"console\">\n        <h2>Corda Ledger States:</h2>\n        {{#payload}}\n            <div class=\"state\">\n                <strong>Amount:</strong> {{amount}}<br>\n                <strong>TokenType:</strong> {{tokenType}}<br>\n                <strong>FractionDigits:</strong> {{fractionDigits}}<br>\n                <strong>IssuedBy:</strong> {{issuedBy}}<br>\n                <strong>HeldBy:</strong> {{heldBy}}<br>\n                <strong>Reference:</strong> {{reference}}<br>\n            </div>\n        {{/payload}}\n    </div>\n</body>\n</html>",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Corda Console</title>\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            background-color: #f4f4f4;\n            margin: 0;\n            padding: 0;\n        }\n\n        .container {\n            max-width: 800px;\n            margin: 20px auto;\n            padding: 20px;\n            background-color: #fff;\n            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n            border-radius: 8px;\n        }\n\n        .transaction {\n            border: 1px solid #ccc;\n            padding: 15px;\n            margin: 15px 0;\n            background-color: #fff;\n            transition: transform 0.2s;\n            border-radius: 8px;\n            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n        }\n\n        .transaction:hover {\n            transform: scale(1.02);\n            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);\n        }\n\n        .transaction h2 {\n            margin: 0;\n            font-size: 1.5rem;\n            color: #333;\n        }\n\n        .state {\n            margin-top: 10px;\n            padding: 10px;\n            border: 1px solid #ccc;\n            background-color: #f9f9f9;\n            border-radius: 8px;\n        }\n\n        .state strong {\n            display: block;\n            font-weight: bold;\n            color: #333;\n            margin-bottom: 5px;\n        }\n\n        h1 {\n            text-align: center;\n            margin-bottom: 20px;\n            font-size: 2rem;\n            color: #333;\n        }\n\n        .console-title {\n            text-align: center;\n            font-size: 1.5rem;\n            color: #333;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <h1>Corda Console</h1>\n        <div class=\"console\">\n            <div class=\"console-title\">Corda Ledger States:</div>\n            {{#payload}}\n                <div class=\"transaction\">\n                    <div class=\"state\">\n                        <strong>Amount:</strong> {{amount}}<br>\n                        <strong>TokenType:</strong> {{tokenType}}<br>\n                        <strong>FractionDigits:</strong> {{fractionDigits}}<br>\n                        <strong>IssuedBy:</strong> {{issuedBy}}<br>\n                        <strong>HeldBy:</strong> {{heldBy}}<br>\n                        <strong>Reference:</strong> {{reference}}<br>\n                    </div>\n                </div>\n            {{/payload}}\n        </div>\n    </div>\n</body>\n</html>\n",
         "output": "str",
-        "x": 560,
-        "y": 740,
+        "x": 580,
+        "y": 980,
         "wires": [
             [
-                "8db44b7e3234998b"
+                "d4af6f1bbbdda68d"
             ]
         ]
     },
     {
-        "id": "92657976a6961780",
+        "id": "f6aecf316ee67e2d",
         "type": "http in",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
         "name": "",
         "url": "/corda-console",
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
         "x": 150,
-        "y": 740,
+        "y": 980,
         "wires": [
             [
-                "0dfde9242280341d"
+                "89a47a456aa22c9b"
             ]
         ]
     },
     {
-        "id": "8db44b7e3234998b",
+        "id": "d4af6f1bbbdda68d",
         "type": "http response",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 710,
-        "y": 740,
+        "x": 730,
+        "y": 980,
         "wires": []
     },
     {
-        "id": "0dfde9242280341d",
+        "id": "89a47a456aa22c9b",
         "type": "function",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
         "name": "parse corda",
-        "func": "\n\nasync function getMe() {\n    try {\n        const response = await axios.get('http://143.198.233.189:50005/me');\n        return response.data\n    } catch (error) {\n        console.error('Error during HTTP GET Request:', error);\n    }\n}\n\n// Function to get states\nasync function getStates() {\n    try {\n        const response = await axios.get('http://143.198.233.189:50005/states');\n\n        return  await parseCordaLedgerOutput(await response.data)\n\n    } catch (error) {\n        console.error('Error during HTTP GET Request:', error);\n    }\n}\n\n\n// Function to burn a token\nasync function burnToken() {\n    const url = 'http://143.198.233.189:50005/burn-token';\n    const queryString = `amount=100&recipient=O=PartyC,L=Mumbai,C=IN&currency=USD`;\n\n    try {\n        const response = await axios.post(url, queryString, {\n            headers: {\n                'Content-Type': 'application/x-www-form-urlencoded'\n            }\n        });\n        const data = await response.data;\n        return parseTokenActionResponse(data);\n    } catch (error) {\n        console.error('Error during HTTP POST Request:', error);\n        return null;\n    }\n}\n\nasync function createToken() {\n    \n    const url = 'http://143.198.233.189:50005/create-token';\n    const queryString = `amount=100&recipient=O=PartyC,L=Mumbai,C=IN&currency=USD`;\n\n    try {\n        const response = await axios.post(url, queryString, {\n            headers: {\n                'Content-Type': 'application/x-www-form-urlencoded'\n            }\n        });\n        const data = await response.data;\n        return parseTokenActionResponse(data);\n    } catch (error) {\n        console.error('Error during HTTP POST Request:', error);\n        return null;\n    }\n}\n\n\n// Example usage\n//  const  one =getMe();\n// createToken(100, 'O=PartyC,L=Mumbai,C=IN', 'USD');\n//burnToken(100, 'O=PartyC,L=Mumbai,C=IN', 'USD')\n\n\n\nfunction parseCordaLedgerOutput(output) {\n    const states = output.match(/StateAndRef\\(state=TransactionState\\(data=[\\s\\S]*?\\), ref=\\S+\\)/g);\n\n    if (!states) {\n        console.log(\"No states found in the output.\");\n        return;\n    }\n\n    const parsedStates = states.map(state => {\n        const dataMatch = state.match(/data=([\\d.]+) TokenType\\(tokenIdentifier='(\\w+)', fractionDigits=(\\d+)/);\n        const issuedByMatch = state.match(/issued by (\\w+)/);\n        const heldByMatch = state.match(/held by (\\w+)/);\n        const refMatch = state.match(/ref=(\\S+)/);\n\n        return {\n            amount: dataMatch ? parseFloat(dataMatch[1]) : null,\n            tokenType: dataMatch ? dataMatch[2] : null,\n            fractionDigits: dataMatch ? parseInt(dataMatch[3], 10) : null,\n            issuedBy: issuedByMatch ? issuedByMatch[1] : null,\n            heldBy: heldByMatch ? heldByMatch[1] : null,\n            reference: refMatch ? refMatch[1] : null\n        };\n    });\n\n    return parsedStates;\n}\n\nfunction parseTokenActionResponse(data) {\n    const transactionIdMatch = data.match(/Transaction id (\\S+) committed to ledger./);\n    const detailsMatch = data.match(/([\\d.]+) TokenType\\(tokenIdentifier='(\\w+)', fractionDigits=(\\d+)\\) issued by (\\w+) held by (\\w+)/);\n\n    return {\n        transactionId: transactionIdMatch ? transactionIdMatch[1] : 'N/A',\n        amount: detailsMatch ? detailsMatch[1] : 'N/A',\n        tokenType: detailsMatch ? detailsMatch[2] : 'N/A',\n        fractionDigits: detailsMatch ? detailsMatch[3] : 'N/A',\n        issuedBy: detailsMatch ? detailsMatch[4] : 'N/A',\n        heldBy: detailsMatch ? detailsMatch[5] : 'N/A'\n    };\n}\n\n\nconst state  = await getStates()\n// const create = await createToken();\n// const burn = await burnToken();\n\n\nmsg.payload = await getStates()\n\nreturn msg",
+        "func": "\n\nasync function getMe() {\n    try {\n        const response = await axios.get('http://143.198.233.189:50005/me');\n        return response.data\n    } catch (error) {\n        console.error('Error during HTTP GET Request:', error);\n    }\n}\n\n// Function to get states\nasync function getStates() {\n    try {\n        const response = await axios.get('http://143.198.233.189:50005/states');\n\n        return  await parseCordaLedgerOutput(await response.data)\n\n    } catch (error) {\n        console.error('Error during HTTP GET Request:', error);\n    }\n}\n\n\n// Function to burn a token\nasync function burnToken() {\n    const url = 'http://143.198.233.189:50005/burn-token';\n    const queryString = `amount=100&recipient=O=PartyC,L=Mumbai,C=IN&currency=USD`;\n\n    try {\n        const response = await axios.post(url, queryString, {\n            headers: {\n                'Content-Type': 'application/x-www-form-urlencoded'\n            }\n        });\n        const data = await response.data;\n        return parseTokenActionResponse(data);\n    } catch (error) {\n        console.error('Error during HTTP POST Request:', error);\n        return null;\n    }\n}\n\nasync function createToken() {\n    \n    const url = 'http://143.198.233.189:50005/create-token';\n    const queryString = `amount=100&recipient=O=PartyC,L=Mumbai,C=IN&currency=USD`;\n\n    try {\n        const response = await axios.post(url, queryString, {\n            headers: {\n                'Content-Type': 'application/x-www-form-urlencoded'\n            }\n        });\n        const data = await response.data;\n        return parseTokenActionResponse(data);\n    } catch (error) {\n        console.error('Error during HTTP POST Request:', error);\n        return null;\n    }\n}\n\n\n// Example usage\n//  const  one =getMe();\n// createToken(100, 'O=PartyC,L=Mumbai,C=IN', 'USD');\n//burnToken(100, 'O=PartyC,L=Mumbai,C=IN', 'USD')\n\n\n\nfunction parseCordaLedgerOutput(output) {\n    const states = output.match(/StateAndRef\\(state=TransactionState\\(data=[\\s\\S]*?\\), ref=\\S+\\)/g);\n\n    if (!states) {\n        console.log(\"No states found in the output.\");\n        return;\n    }\n\n    const parsedStates = states.map(state => {\n        const dataMatch = state.match(/data=([\\d.]+) TokenType\\(tokenIdentifier='(\\w+)', fractionDigits=(\\d+)/);\n        const issuedByMatch = state.match(/issued by (\\w+)/);\n        const heldByMatch = state.match(/held by (\\w+)/);\n        const refMatch = state.match(/ref=(\\S+)/);\n\n        return {\n            amount: dataMatch ? parseFloat(dataMatch[1]) : null,\n            tokenType: dataMatch ? dataMatch[2] : null,\n            fractionDigits: dataMatch ? parseInt(dataMatch[3], 10) : null,\n            issuedBy: issuedByMatch ? issuedByMatch[1] : null,\n            heldBy: heldByMatch ? heldByMatch[1] : null,\n            reference: refMatch ? refMatch[1] : null\n        };\n    });\n\n    return parsedStates[parsedStates.length -1];\n}\n\nfunction parseTokenActionResponse(data) {\n    const transactionIdMatch = data.match(/Transaction id (\\S+) committed to ledger./);\n    const detailsMatch = data.match(/([\\d.]+) TokenType\\(tokenIdentifier='(\\w+)', fractionDigits=(\\d+)\\) issued by (\\w+) held by (\\w+)/);\n\n    return {\n        transactionId: transactionIdMatch ? transactionIdMatch[1] : 'N/A',\n        amount: detailsMatch ? detailsMatch[1] : 'N/A',\n        tokenType: detailsMatch ? detailsMatch[2] : 'N/A',\n        fractionDigits: detailsMatch ? detailsMatch[3] : 'N/A',\n        issuedBy: detailsMatch ? detailsMatch[4] : 'N/A',\n        heldBy: detailsMatch ? detailsMatch[5] : 'N/A'\n    };\n}\n\n\nconst state  = await getStates()\n// const create = await createToken();\n// const burn = await burnToken();\n\n\nmsg.payload = await getStates()\n\nreturn msg",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -377,19 +378,19 @@
                 "module": "querystring"
             }
         ],
-        "x": 370,
-        "y": 740,
+        "x": 390,
+        "y": 980,
         "wires": [
             [
-                "03e6b08456673c3d",
-                "0af1f829d8cf5deb"
+                "3e037fdbee4a5523",
+                "61cf6b4a7b624e29"
             ]
         ]
     },
     {
-        "id": "0af1f829d8cf5deb",
+        "id": "61cf6b4a7b624e29",
         "type": "debug",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
         "name": "Burn txn hash",
         "active": true,
         "tosidebar": true,
@@ -399,14 +400,14 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 580,
-        "y": 820,
+        "x": 600,
+        "y": 1060,
         "wires": []
     },
     {
-        "id": "c8828979cd78dbd7",
+        "id": "1cb0753530f498d2",
         "type": "inject",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
         "name": "burn tokens",
         "props": [
             {
@@ -426,79 +427,272 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 150,
-        "y": 820,
+        "y": 1060,
         "wires": [
             [
-                "0dfde9242280341d"
+                "89a47a456aa22c9b"
             ]
         ]
     },
     {
-        "id": "6707c350e5379ac0",
+        "id": "f436a87a99b63d77",
         "type": "debug",
-        "z": "cd067fae9e174ca3",
-        "name": "Get txn hash",
+        "z": "d2d0aa73a11dcc03",
+        "name": "corda txn Info",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "cordaBurnedAmount",
+        "complete": "cordaTxnInfo",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 710,
-        "y": 420,
+        "x": 1100,
+        "y": 560,
         "wires": []
     },
     {
-        "id": "0753ac940e3a03f2",
+        "id": "d79291e84b04ddd8",
         "type": "http in",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
+        "d": true,
         "name": "",
         "url": "/prepare-swap",
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
         "x": 130,
-        "y": 260,
+        "y": 320,
         "wires": [
             [
-                "9622b1850df35f4c"
+                "6a4e25ed7f3e7ae5",
+                "657192de4c7dc2f2"
             ]
         ]
     },
     {
-        "id": "f5650cadb0816ce1",
+        "id": "f819677777ea1f03",
         "type": "http in",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
+        "d": true,
         "name": "",
         "url": "/besu-mint",
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 120,
-        "y": 440,
+        "x": 100,
+        "y": 580,
         "wires": [
             [
-                "188fc6bbf084194b"
+                "406d3717977764bf"
             ]
         ]
     },
     {
-        "id": "69a8ac9992b2cc40",
+        "id": "9ef71d3abd4030fc",
         "type": "http in",
-        "z": "cd067fae9e174ca3",
+        "z": "d2d0aa73a11dcc03",
         "name": "",
         "url": "/corda-mint",
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 120,
-        "y": 620,
+        "x": 100,
+        "y": 860,
         "wires": [
             [
-                "dce0f389282f5730"
+                "15d320b3b56279aa"
             ]
         ]
+    },
+    {
+        "id": "657192de4c7dc2f2",
+        "type": "function",
+        "z": "d2d0aa73a11dcc03",
+        "name": "account mapping EVM <=> Corda",
+        "func": "/*\nThis is an example snippet - you should consider tailoring it\nto your service.\n*/\nasync function fetchGraphQL(operationsDoc, operationName, variables) {\n  const result = await fetch(\n    \"https://nbd-demo-hasura-ca5d.aks-middleeast.settlemint.com/v1/graphql\",\n    {\n      method: \"POST\",\n      body: JSON.stringify({\n        query: operationsDoc,\n        variables: variables,\n        operationName: operationName\n      }),\n      headers: {\n      'Content-Type': 'application/json',\n      'x-auth-token': 'sm_sat_eced4996488787d7',  // Add your auth token here\n        \"x-hasura-admin-secret\": \"099b2bb5264e76f336d4\", \n    },\n    }\n  );\n\n  return await result.json();\n}\n\nlet recipient = msg.recipient\n\nconst operationsDoc = `\nquery MyQuery {\n  Mapping(where: {_or: {}, BesuAddr: {_eq: \"${recipient}\"}, CordaAcc: {}}) {\n    BesuAddr\n    CordaAcc\n  }\n}\n`;\n\nfunction fetchMyQuery() {\n  return fetchGraphQL(\n    operationsDoc,\n    \"MyQuery\",\n    {}\n  );\n}\n\nasync function startFetchMyQuery() {\n  const { errors, data } = await fetchMyQuery();\n\n  if (errors) {\n    // handle those errors like a pro\n    // console.error(errors);\n    return errors \n  }\nreturn data \n  // do something great with this precious data\n  // console.log(data);\n}\n\nlet getAcc= await startFetchMyQuery();\n\nglobal.set('mappingEvmAndCorda', getAcc.Mapping[0].CordaAcc );\n\nmsg.cordaMapping = getAcc.Mapping[0]\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "fetch",
+                "module": "node-fetch"
+            }
+        ],
+        "x": 580,
+        "y": 300,
+        "wires": [
+            [
+                "991ca47de9ce3dd3"
+            ]
+        ]
+    },
+    {
+        "id": "991ca47de9ce3dd3",
+        "type": "debug",
+        "z": "d2d0aa73a11dcc03",
+        "name": "corda mapping",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "cordaMapping",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 880,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "eeb422cdc70073ec",
+        "type": "http in",
+        "z": "d2d0aa73a11dcc03",
+        "d": true,
+        "name": "",
+        "url": "/evm-events",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 1240,
+        "wires": [
+            [
+                "86d8de7c8660dd1b"
+            ]
+        ]
+    },
+    {
+        "id": "86d8de7c8660dd1b",
+        "type": "template",
+        "z": "d2d0aa73a11dcc03",
+        "d": true,
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Token Transactions</title>\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            background-color: #f4f4f4;\n            margin: 0;\n            padding: 0;\n        }\n\n        .container {\n            max-width: 800px;\n            margin: 20px auto;\n            padding: 20px;\n            background-color: #fff;\n            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n            border-radius: 8px;\n        }\n\n        .transaction {\n            border: 1px solid #ccc;\n            padding: 15px;\n            margin: 15px 0;\n            background-color: #fff;\n            transition: transform 0.2s;\n            border-radius: 8px;\n        }\n\n        .transaction:hover {\n            transform: scale(1.02);\n            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);\n        }\n\n        .transaction h2 {\n            margin: 0;\n            font-size: 1.5rem;\n            color: #333;\n        }\n\n        .transaction p {\n            margin: 5px 0;\n            font-size: 1rem;\n            color: #666;\n        }\n\n        h1 {\n            text-align: center;\n            margin-bottom: 20px;\n            font-size: 2rem;\n            color: #333;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <h1>Token Transactions</h1>\n        <div class=\"transaction\">\n            <h2>Transaction ID: 123456</h2>\n            <p>Token Claim</p>\n            <p>Secret: ABC123</p>\n        </div>\n        <div class=\"transaction\">\n            <h2>Transaction ID: 789012</h2>\n            <p>Recipient Change</p>\n            <p>New Recipient: 0x123456789</p>\n        </div>\n        <div class=\"transaction\">\n            <h2>Transaction ID: 345678</h2>\n            <p>Token Burn</p>\n            <p>Burner: 0x987654321</p>\n            <p>Amount: 1000</p>\n        </div>\n        <div class=\"transaction\">\n            <h2>Transaction ID: 567890</h2>\n            <p>Secret Hash Update</p>\n            <p>New Secret Hash: true</p>\n        </div>\n        <div class=\"transaction\">\n            <h2>Transaction ID: 987654</h2>\n            <p>Token Claim</p>\n            <p>Secret: XYZ789</p>\n        </div>\n    </div>\n</body>\n</html>\n",
+        "output": "str",
+        "x": 380,
+        "y": 1240,
+        "wires": [
+            [
+                "e7b17d0183b856e1"
+            ]
+        ]
+    },
+    {
+        "id": "e7b17d0183b856e1",
+        "type": "http response",
+        "z": "d2d0aa73a11dcc03",
+        "d": true,
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 550,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "76ec27a780a92931",
+        "type": "template",
+        "z": "d2d0aa73a11dcc03",
+        "d": true,
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Transaction References</title>\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            background-color: #f4f4f4;\n            margin: 0;\n            padding: 0;\n        }\n\n        .container {\n            max-width: 800px;\n            margin: 20px auto;\n            padding: 20px;\n            background-color: #fff;\n            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n            border-radius: 8px;\n        }\n\n        table {\n            width: 100%;\n            border-collapse: collapse;\n            margin-top: 20px;\n        }\n\n        th, td {\n            border: 1px solid #ccc;\n            padding: 10px;\n            text-align: left;\n        }\n\n        th {\n            background-color: #f2f2f2;\n        }\n\n        th:first-child, td:first-child {\n            font-weight: bold;\n        }\n\n        .blockscout-link {\n            text-decoration: none;\n            color: #007bff;\n        }\n\n        .blockscout-link:hover {\n            text-decoration: underline;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <h1>Transaction References</h1>\n        <table>\n            <tr>\n                <th>Hasura Indexer ID</th>\n                <th>Corda Transaction Reference</th>\n                <th>Besu EVM Transaction Hash</th>\n            </tr>\n            <tr>\n                <td>ID-001</td>\n                <td>TXN-001</td>\n                <td>\n                    <a class=\"blockscout-link\" href=\"/blockscout/0x123456789\">\n                        0x123456789\n                    </a>\n                </td>\n            </tr>\n            <tr>\n                <td>ID-002</td>\n                <td>TXN-002</td>\n                <td>\n                    <a class=\"blockscout-link\" href=\"/blockscout/0x987654321\">\n                        0x987654321\n                    </a>\n                </td>\n            </tr>\n            <tr>\n                <td>ID-003</td>\n                <td>TXN-003</td>\n                <td>\n                    <a class=\"blockscout-link\" href=\"/blockscout/0xABCDEF123\">\n                        0xABCDEF123\n                    </a>\n                </td>\n            </tr>\n            <!-- Add more rows as needed -->\n        </table>\n    </div>\n</body>\n</html>\n",
+        "output": "str",
+        "x": 340,
+        "y": 1320,
+        "wires": [
+            [
+                "75db83820917bd55"
+            ]
+        ]
+    },
+    {
+        "id": "ce6703b90ca1c80f",
+        "type": "http in",
+        "z": "d2d0aa73a11dcc03",
+        "d": true,
+        "name": "",
+        "url": "/corda",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 1320,
+        "wires": [
+            [
+                "76ec27a780a92931"
+            ]
+        ]
+    },
+    {
+        "id": "75db83820917bd55",
+        "type": "http response",
+        "z": "d2d0aa73a11dcc03",
+        "d": true,
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 490,
+        "y": 1320,
+        "wires": []
+    },
+    {
+        "id": "6bfe602f3c31e4a5",
+        "type": "function",
+        "z": "d2d0aa73a11dcc03",
+        "name": "index swap",
+        "func": "\n\nconst object = {\n  \"swapID\": Math.floor((Math.random() * 1000000) + 1),\n  \"besuTxn\":  await msg.mintTxnHash,\n  \"cordaref\": await  msg.cordaTxnInfo,\n  \"status\": \"works!\"\n  }\n\nasync function fetchGraphQL(operationsDoc, operationName, variables) {\n  const result = await fetch(\n    \"https://nbd-demo-hasura-ca5d.aks-middleeast.settlemint.com/v1/graphql\",\n    {\n      method: \"POST\",\n      body: JSON.stringify({\n        query: operationsDoc,\n        variables: variables,\n        operationName: operationName\n      }),\n         headers: {\n        'Content-Type': 'application/json',\n        'x-auth-token': 'sm_sat_eced4996488787d7',  // Add your auth token here\n        \"x-hasura-admin-secret\": \"099b2bb5264e76f336d4\",\n      },\n    }\n  );\n\n  return await result.json();\n}\n\n\nconst operationsDoc = `\n  mutation insert_swapTable_one($object: swapTable_insert_input!) {\n    insert_swapTable_one(object: $object) {\n      besuTxn\n      cordaref\n      swapID\n    }\n  }\n`;\n\nfunction executeInsert_swapTable_one(object) {\n  return fetchGraphQL(\n    operationsDoc,\n    \"insert_swapTable_one\",\n    { \"object\": object }\n  );\n}\n\nasync function startExecuteInsert_swapTable_one(object) {\n  const { errors, data } = await executeInsert_swapTable_one(object);\n\n  if (errors) {\n    // handle those errors like a pro\n    console.error(errors);\n  }\n  // do something great with this precious data\n  return await data \n}\n\nif(msg.mintTxnHash == undefined){\n  msg.mintTxnHash = 'proccesing';\n  msg.cordaTxnInfo = 'proccesing';\n  msg.payload = 'proccesing'\n  return msg \n}\n\nmsg.payload = await startExecuteInsert_swapTable_one(object);\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "fetch",
+                "module": "node-fetch"
+            },
+            {
+                "var": "uuid",
+                "module": "uuid"
+            }
+        ],
+        "x": 830,
+        "y": 500,
+        "wires": [
+            [
+                "cfbc95d3eef14193",
+                "f436a87a99b63d77",
+                "f9bf56152ac4c099"
+            ]
+        ]
+    },
+    {
+        "id": "f9bf56152ac4c099",
+        "type": "debug",
+        "z": "d2d0aa73a11dcc03",
+        "name": "graph object",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1090,
+        "y": 400,
+        "wires": []
     }
 ]
