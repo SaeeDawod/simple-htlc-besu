@@ -9,13 +9,12 @@ contract MyToken is ERC20, Ownable, ERC20Permit {
     bytes32 public secretHash;
     address public recipient;
     uint256 public timelock;
-    // uint256 public mintAmount;
     uint256 public amountAllowedToMint;
 
     event TokensClaimed(string secret);
     event RecipientChanged(address newRecipient);
     event TokensBurned(address indexed burner, uint256 amount);
-    event secertHashChanged (bool newSecertHash);
+    event SecretHashChanged (bool newSecertHash);
 
     constructor(
         // address _initialOwner
@@ -57,8 +56,7 @@ contract MyToken is ERC20, Ownable, ERC20Permit {
         amountAllowedToMint = _approveMintAmount;
 
         emit RecipientChanged(_recipient);
-        emit secertHashChanged(true);
+        emit SecretHashChanged(true);
     }
-
     // rest of erc 20 functions
 }
